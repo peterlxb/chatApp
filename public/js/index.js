@@ -1,48 +1,29 @@
-// $(function () {
-//     var socket = io();
-//     // $('form').submit(function () {
-//     //     socket.emit('createMessage', $('#m').val());
-//     //     $('#m').val('');
-//     //     return false;
-//     // });
+$(function () {
+    var socket = io();
 
-//     socket.on('connect', function() {
-//         console.log('Connectted to server');
+    $('form').submit(function () {
+
+        socket.emit('createMessage', {
+            from:'user',
+            text: $('#m').val()
+        } , function (data) {
+            console.log('Got it', data);
+        });
+        $('#m').val('');
+        return false;
+
+    });
+
+    socket.on('connect', function() {
+        console.log('Connectted to server');
+    });
+
+    socket.on('NewMessage', function (message) {
+        var li = jQuery('<li></li>');
+        li.text(`${message.from}: ${message.text}`);
+        $("#messages").append(li);
+        console.log("newMessage", message);
+    });
+
     
-//         socket.emit('createMessage',  {
-//             from: 'peter',
-//             text:'Yup, that works for me'
-//         });
-//     });
-
-//     socket.on('disconnect', function() {
-//         console.lof('Disconnect from server');
-//     });
-
-//     socket.on('NewMessage', function(message){
-//         //$("#message").append($('<li>').text(msg));
-//         console.log("newMessage",message);
-//     });
-// });
-
-var socket = io();
-
-socket.on('connect', function () {
-    console.log('Connectted to server');
-});
-
-socket.on('disconnect', function () {
-    console.log('Disconnect from server');
-});
-
-socket.on('NewMessage', function (message) {
-    //$("#message").append($('<li>').text(msg));
-    console.log("newMessage", message);
-});
-
-socket.emit('createMessage',{
-    from:'eveyang',
-    text:'HI'
-}, function(data) {
-    console.log('Got it',data);
 });
