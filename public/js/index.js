@@ -39,3 +39,10 @@ socket.on('NewMessage', function (message) {
     //$("#message").append($('<li>').text(msg));
     console.log("newMessage", message);
 });
+
+socket.emit('createMessage',{
+    from:'eveyang',
+    text:'HI'
+}, function(data) {
+    console.log('Got it',data);
+});
