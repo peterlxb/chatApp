@@ -14,6 +14,22 @@ $(function () {
 
     });
 
+    $('#send-loc').click(function () {
+        if(!navigator.geolocation) {
+            return alert('Geolocation not supported by your browser');
+        }
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            socket.emit('createLocationMessage',{
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            });
+            console.log(position)
+        }, function () {
+            alert('Unable to fetch location');
+        }) ;
+    });
+
     socket.on('connect', function() {
         console.log('Connectted to server');
     });
