@@ -53,6 +53,17 @@ $(function () {
 
     socket.on('connect', function() {
         console.log('Connectted to server');
+        var params = $.deparam(window.location.search);
+
+        socket.emit('join', params, function (err) {
+            if (err) {
+                alert(err);
+                window.location.href = '/';
+            } else {
+                console.log("No error");
+            }
+
+        });
     });
 
     socket.on('NewMessage', function (message) {
