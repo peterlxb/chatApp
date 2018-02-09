@@ -34,14 +34,24 @@ io.on('connection',function(socket) {
     });
 
     socket.on('createMessage', (message,callback) => {
-        console.log("createMessage: ", message);
+        var user = users.getUser(socket.id);
 
-        io.emit('NewMessage',generateMessage(message.from, message.text));
+        if (user && isRealString(message.text)) {
+            io.to(user.room).emit('NewMessage', generateMessage(user.name, message.text));
+        }
+
+       
         callback('This is from server');
     });
 
     socket.on('createLocationMessage', (coords) => {
-        io.emit('NewLocationMessage',generateLocationMessage('Admin',coords.latitude, coords.longitude));
+        var user = users.getUser(socket.id);
+
+        if (user) {
+            io.to(user.room).emit('NewLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+        }
+
+        
     });
 
     socket.on('disconnect', function() {
